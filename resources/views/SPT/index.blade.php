@@ -27,9 +27,7 @@
             <div class="d-flex flex-lg-grow-1 flex-stack gap-5" id="kt_app_navbar_wrapper">
                 <!--begin::Search-->
                 <div class="d-flex align-items-center align-items-stretch">
-                    <!--begin::Search-->
-
-                    <!--end::Search-->
+                <h1 class="text-gray-800 fw-bold">Dashboard SPT Tahunan</h1>
                 </div>
                 <!--end::Search-->
                 <!--begin::Navbar-->
