@@ -13,6 +13,7 @@ class GajiImport implements ToCollection
 {
     protected $bulan;
     protected $tahun;
+    protected $importedCount = 0;
 
     public function __construct($bulan, $tahun)
     {
@@ -122,6 +123,12 @@ class GajiImport implements ToCollection
                     'tahun' => $this->tahun,
                 ]);
             }
+            $this->importedCount++;
         }
+    }
+
+    public function getImportedCount()
+    {
+        return $this->importedCount;
     }
 }

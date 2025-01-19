@@ -28,37 +28,7 @@
                 <!--begin::Search-->
                 <div class="d-flex align-items-center align-items-stretch">
                     <!--begin::Search-->
-                    <div id="kt_header_search" class="header-search d-flex align-items-center w-100 w-lg-250px"
-                        data-kt-search-keypress="true" data-kt-search-min-length="2" data-kt-search-enter="enter"
-                        data-kt-search-layout="menu" data-kt-search-responsive="lg" data-kt-menu-trigger="auto"
-                        data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
-                        <!--begin::Tablet and mobile search toggle-->
-                        <div data-kt-search-element="toggle"
-                            class="search-toggle-mobile d-flex d-lg-none align-items-center">
-                            <div class="d-flex">
-                                <i class="ki-outline ki-magnifier fs-1"></i>
-                            </div>
-                        </div>
-                        <!--end::Tablet and mobile search toggle-->
-                        <!--begin::Form(use d-none d-lg-block classes for responsive search)-->
-                        <form data-kt-search-element="form" method="post" action="{{ route('/') }}"
-                            class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
-                            @csrf
-                            @method('GET')
-                            <i
-                                class="ki-outline ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5"></i>
-                            <input type="text" class="search-input form-control border bg-gray-100 ps-13" name="search"
-                                value="{{ old('search', $search ?? '') }}" placeholder="Cari NIP atau Nama Pegawai..."
-                                data-kt-search-element="input" />
-                                <!--end::Reset-->
-                            </form>
-                            @if (request('search'))
-                                <a href="{{ route('/') }}" class="btn btn-icon btn-danger ms-2" data-bs-tooltip="tooltip" data-bs-placement="right" title="Reset Search">
-                                    <i class="ki-outline ki-arrow-circle-left fs-2"></i>
-                                </a>
-                            @endif
-                        <!--end::Form-->
-                    </div>
+
                     <!--end::Search-->
                 </div>
                 <!--end::Search-->
@@ -84,6 +54,82 @@
                 <span class="card-label fw-bold text-gray-800">SPT TAHUNAN</span>
                 {{-- <span class="text-gray-500 mt-1 fw-semibold fs-6">Updated 37 minutes ago</span> --}}
             </h3>
+            <div class="card-toolbar">
+                <div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div id="kt_header_search" class="header-search d-flex align-items-center"
+                                data-kt-search-keypress="true" data-kt-search-min-length="2" data-kt-search-enter="enter"
+                                data-kt-search-layout="menu" data-kt-search-responsive="lg" data-kt-menu-trigger="auto"
+                                data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                                <!--begin::Tablet and mobile search toggle-->
+                                <div data-kt-search-element="toggle"
+                                    class="search-toggle-mobile d-flex d-lg-none align-items-center">
+                                    <div class="d-flex">
+                                        <i class="ki-outline ki-magnifier fs-1"></i>
+                                    </div>
+                                </div>
+                                <!--end::Tablet and mobile search toggle-->
+                                <!--begin::Form(use d-none d-lg-block classes for responsive search)-->
+                                <form data-kt-search-element="form" method="post" action="{{ route('/') }}"
+                                    class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
+                                    @csrf
+                                    @method('GET')
+                                    <i
+                                        class="ki-outline ki-magnifier search-icon fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5"></i>
+                                    <input type="text" class="search-input form-control border bg-gray-100 ps-13" name="search"
+                                        value="{{ old('search', $search ?? '') }}" placeholder="Cari NIP atau Nama Pegawai..."
+                                        data-kt-search-element="input" />
+                                    @if (request('search'))
+                                        <a href="{{ route('/') }}" class="btn btn-icon btn-secondary position-absolute top-50 end-0 translate-middle-y me-2" data-bs-tooltip="tooltip"
+                                            data-bs-placement="right" title="Reset Search">
+                                            <i class="ki-outline ki-arrow-circle-left fs-2"></i>
+                                        </a>
+                                    @endif
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div id="kt_header_search" class="header-search d-flex align-items-center"
+                                data-kt-search-keypress="true" data-kt-search-min-length="2" data-kt-search-enter="enter"
+                                data-kt-search-layout="menu" data-kt-search-responsive="lg" data-kt-menu-trigger="auto"
+                                data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                                <form data-kt-search-element="form" method="post" action="{{ route('/') }}"
+                                    class="d-none d-lg-block w-100 position-relative mb-5 mb-lg-0" autocomplete="off">
+                                    @csrf
+                                    @method('GET')
+                                    <i class="ki-outline ki-filter-search fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5"></i>
+                                    <select class="form-select form-select-solid ps-13" id="filterYear" name="filterYear"
+                                        onchange="this.form.submit()">
+                                        <option value="">Pilih Tahun</option>
+                                        @foreach ($tahun as $thn)
+                                            <option value="{{ $thn->tahun }}"
+                                                {{ request('filterYear') == $thn->tahun ? 'selected' : '' }}>
+                                                {{ $thn->tahun }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div id="kt_header_search" class="header-search d-flex align-items-center"
+                                data-kt-search-keypress="true" data-kt-search-min-length="2" data-kt-search-enter="enter"
+                                data-kt-search-layout="menu" data-kt-search-responsive="lg" data-kt-menu-trigger="auto"
+                                data-kt-menu-permanent="true" data-kt-menu-placement="bottom-start">
+                                    <i class="ki-outline ki-filter-search fs-2 text-gray-500 position-absolute top-50 translate-middle-y ms-5"></i>
+                                    <select class="form-select form-select-solid ps-13" id="filterOpd" name="filterOpd"
+                                        onchange="this.form.submit()">
+                                        <option value="">Pilih OPD</option>
+                                        @foreach ($opd as $satker)
+                                            <option value="{{ $satker->id }}" {{ request('filterOpd') == $satker->id ? 'selected' : '' }}>
+                                                {{ $satker->nama_satker }}</option>
+                                        @endforeach
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\GajiExport;
 use App\Imports\GajiImport;
 use App\Models\Gaji;
+use App\Models\Opd;
 use App\Models\Pegawai;
 use Exception;
 use Illuminate\Http\Request;
@@ -14,16 +15,30 @@ class GajiController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->input('search'); // Ambil input pencarian
-        $pegawai = Pegawai::when($search, function ($query, $search) {
-            $query->where('nip', 'like', "%{$search}%")
-                ->orWhere('nama', 'like', "%{$search}%");
-        })->paginate(10); // Paginate hasil pencarian
+        $search = $request->input('search');
+        $filterYear = $request->input('filterYear');
+        $filterOpd = $request->input('filterOpd');
 
-        // Return view dengan data hasil pencarian
-        return view('SPT.index', compact('pegawai', 'search'));
+        $pegawai = Pegawai::query()
+            ->when($search, function ($query, $search) {
+                $query->where('nip', 'like', "%{$search}%")
+                    ->orWhere('nama', 'like', "%{$search}%");
+            })
+            ->when($filterOpd, function ($query, $filterOpd) {
+                $query->where('opd_id', $filterOpd);
+            })
+            ->when($filterYear, function ($query, $filterYear) {
+                $query->whereHas('gaji', function ($query) use ($filterYear) {
+                    $query->where('tahun', $filterYear);
+                });
+            })
+            ->paginate(10);
+
+        $opd = Opd::orderBy('nama_satker', 'asc')->get();
+        $tahun = Gaji::select('tahun')->groupBy('tahun')->orderBy('tahun', 'desc')->get();
+
+        return view('SPT.index', compact('pegawai', 'search', 'opd', 'tahun'));
     }
-
 
     public function show(Pegawai $pegawai)
     {
@@ -45,13 +60,15 @@ class GajiController extends Controller
         $tahun = $request->year;
 
         try {
-            Excel::import(new GajiImport($bulan, $tahun), $request->file('file'));
+            $import = new GajiImport($bulan, $tahun);
+            Excel::import($import, $request->file('file'));
+            $importedCount = $import->getImportedCount();
+            session()->flash('success', "Data bulan $request->month berhasil diimpor! Jumlah data yang diimpor: $importedCount");
         } catch (Exception $e) {
             session()->flash('error', $e->getMessage());
             return redirect()->back();
         }
 
-        session()->flash('success', "Data bulan $request->month berhasil diimpor!");
         return redirect()->back();
     }
 
