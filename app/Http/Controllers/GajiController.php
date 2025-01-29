@@ -72,11 +72,35 @@ class GajiController extends Controller
         return redirect()->back();
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        // $pegawai = Pegawai::paginate(10);
-        // return view('export_gaji', compact('pegawai'));
+        $search = $request->input('search');
+        $filterYear = $request->input('filterYear');
+        $filterOpd = $request->input('filterOpd');
 
-        return Excel::download(new GajiExport, 'Laporan Gaji.xlsx');
+        if ($filterOpd) {
+            $opd = Opd::find($filterOpd)->nama_satker;
+        }
+
+        $year = $filterYear ?? date('Y');
+        $nama_file = $filterOpd != null ? "Laporan Gaji ".$opd." tahun ".$year : "Laporan Gaji ".$year;
+
+        $pegawai = Pegawai::query()
+            ->when($search, function ($query, $search) {
+                $query->where('nip', 'like', "%{$search}%")
+                    ->orWhere('nama', 'like', "%{$search}%");
+            })
+            ->when($filterOpd, function ($query, $filterOpd) {
+                $query->where('opd_id', $filterOpd);
+            })
+            ->when($filterYear, function ($query, $filterYear) {
+                $query->whereHas('gaji', function ($query) use ($filterYear) {
+                    $query->where('tahun', $filterYear);
+                });
+            })
+            ->get();
+
+            return Excel::download(new GajiExport($pegawai), $nama_file.'.xlsx');
+            // return view('export_gaji', compact('pegawai'));
     }
 }

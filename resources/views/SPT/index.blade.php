@@ -35,14 +35,54 @@
                     <button type="button" class="btn btn-flex btn-outline btn-active-primary fs-6 h-40px px-4"
                         data-bs-toggle="modal" data-bs-target="#uploadModal">
                         <i class="ki-outline ki-file-up fs-2 pe-2"></i>Import</button>
-                    <a href="{{ route('gaji.export') }}" class="btn btn-flex btn-success fs-6 h-40px px-4">
-                        <i class="ki-outline ki-file-down fs-2 pe-2"></i>Export</a>
+                        <button class="btn btn-flex btn-success fs-6 h-40px px-4" type="button" data-bs-toggle="modal" data-bs-target="#ModalFilter">
+                            <i class="ki-outline ki-file-down fs-2 pe-2"></i>Export
+                        </button>
                 </div>
                 <!--end::Navbar-->
             </div>
             <!--end::Navbar wrapper-->
         </div>
         <!--end::Header container-->
+    </div>
+    <div class="modal fade" id="ModalFilter" tabindex="-1" aria-labelledby="ModalFilterLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ModalFilterLabel">Filter Data</h5>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('gaji.export') }}" method="GET">
+                        <div class="mb-3">
+                            <label for="filterYear" class="form-label">Year</label>
+                            <select class="form-select form-select-solid" id="filterYear" name="filterYear">
+                                <option value="">Pilih Tahun</option>
+                                @foreach ($tahun as $thn)
+                                    <option value="{{ $thn->tahun }}">{{ $thn->tahun }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="filterOpd" class="form-label">OPD</label>
+                            <select class="form-select form-select-solid" id="filterOpd" name="filterOpd">
+                                <option value="">Pilih OPD</option>
+                                @foreach ($opd as $satker)
+                                    <option value="{{ $satker->id }}">{{ $satker->nama_satker }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ki-outline ki-filter fs-4"></i>Filter
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="ki-outline ki-cross fs-4"></i>Close
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
     </div>
 @endsection
 @section('content')
