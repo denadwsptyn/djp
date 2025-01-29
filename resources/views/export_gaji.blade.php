@@ -102,7 +102,7 @@
                         <td class="sticky-column nama-column">{{ $employee->nama }}</td>
                         <td>{{ $employee->nik ? "'$employee->nik" : '-' }}</td>
                         <td>{{ $employee->npwp ? "'$employee->npwp" : '-' }}</td>
-                        <td>{{ $employee->tanggal_lahir ?? '-' }}</td>
+                        <td>{{ $employee->opd->nama_satker ?? '-' }}</td>
                         <td>{{ $employee->nama_jabatan ?? '-' }}</td>
                         <td class="text-center">{{ $employee->eselon ?? '-' }}</td>
                         <td class="text-center">{{ $employee->golongan ?? '-' }}</td>

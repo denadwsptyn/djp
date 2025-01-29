@@ -76,6 +76,7 @@
                             <th class="text-center w-15">Jumlah Gaji dan Tunjangan</th>
                             <th class="text-center w-15">Jumlah Potongan</th>
                             <th class="text-center w-15">Jumlah Ditransfer</th>
+                            <th class="text-center w-15">Nama Satker</th>
                             <th class="text-center w-5"></th>
                         </tr>
                     </thead>
@@ -123,6 +124,7 @@
                                 <td class="text-center w-20">{{ number_format($item->jumlah_potongan, 0, ',', '.') }}</td>
                                 <td class="text-center w-20">{{ number_format($item->jumlah_ditransfer, 0, ',', '.') }}
                                 </td>
+                                <th class="text-start w-20">{{ $item->pegawai->opd->nama_satker }}</th>
                                 <td>
                                     <a href="{{ route('gaji.edit', $item->id) }}" class="btn btn-warning btn-sm">
                                         <i class="ki-outline ki-pencil"></i>
